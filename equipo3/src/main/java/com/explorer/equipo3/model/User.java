@@ -22,9 +22,6 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
     @ManyToOne
-    @JoinColumn(name = "location_id")
-    private Location location;
-    @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
 

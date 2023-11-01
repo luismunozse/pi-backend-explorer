@@ -1,7 +1,6 @@
 package com.explorer.equipo3.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.DatabindException;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,6 +23,8 @@ public class Product {
     private Long id;
     @Column(name = "name", nullable = false, length = 50)
     private String name;
+    @Column(name = "price", nullable = false)
+    private Double price;
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
@@ -32,9 +33,9 @@ public class Product {
     private Location location;
     @OneToMany(mappedBy = "product")
     private Set<Image> images;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @ManyToMany
+    @JoinTable(name = "product_detail", joinColumns = { @JoinColumn(name = "product_id")}, inverseJoinColumns = {@JoinColumn(name = "detail_id")})
+    private Set<Detail> details;
     @CreationTimestamp
     @JsonIgnore
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -44,11 +45,12 @@ public class Product {
     @Column(name = "updated_at", nullable = false)
     private Date updated_at;
 
-    public Product(String name, Category category, Location location, Set<Image> images, User user) {
+    public Product(String name, Double price, Category category, Location location, Set<Image> images, Set<Detail> details) {
         this.name = name;
+        this.price = price;
         this.category = category;
         this.location = location;
         this.images = images;
-        this.user = user;
+        this.details = details;
     }
 }
